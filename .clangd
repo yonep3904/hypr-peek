@@ -1,0 +1,22 @@
+CompileFlags:
+  CompilationDatabase: build/dev
+
+Index:
+  Background: Build
+  StandardLibrary: true
+
+Diagnostics:
+  UnusedIncludes: Strict
+  MissingIncludes: Strict
+
+Completion:
+  HeaderInsertion: IWYU
+
+InlayHints:
+  Enabled: true
+  ParameterNames: true
+  DeducedTypes: true
+  Designators: true
+  DefaultArguments: false
+  BlockEnd: false
+  TypeNameLimit: 32
