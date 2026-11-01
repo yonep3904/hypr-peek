@@ -1,0 +1,108 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 25,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "base",
+      "hidden": true,
+      "generator": "Unix Makefiles",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "cacheVariables": {
+        "BUILD_TESTING": "ON",
+        "BUILD_SHARED_LIBS": "OFF",
+        "CMAKE_CXX_EXTENSIONS": "OFF",
+        "CMAKE_CXX_STANDARD_REQUIRED": "ON",
+        "HYPRPEEK_WARNINGS_AS_ERRORS": "OFF"
+      }
+    },
+    {
+      "name": "dev",
+      "displayName": "Clang Debug (development)",
+      "inherits": "base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_CXX_COMPILER": "clang++"
+      }
+    },
+    {
+      "name": "release",
+      "displayName": "GCC Release (without tests)",
+      "inherits": "base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_CXX_COMPILER": "g++",
+        "BUILD_TESTING": "OFF"
+      }
+    },
+    {
+      "name": "ci-clang",
+      "inherits": "dev",
+      "cacheVariables": {
+        "HYPRPEEK_WARNINGS_AS_ERRORS": "ON",
+        "BUILD_TESTING": "ON"
+      }
+    },
+    {
+      "name": "ci-gcc",
+      "inherits": "release",
+      "cacheVariables": {
+        "HYPRPEEK_WARNINGS_AS_ERRORS": "ON",
+        "BUILD_TESTING": "ON"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "dev",
+      "configurePreset": "dev"
+    },
+    {
+      "name": "release",
+      "configurePreset": "release"
+    },
+    {
+      "name": "ci-clang",
+      "configurePreset": "ci-clang"
+    },
+    {
+      "name": "ci-gcc",
+      "configurePreset": "ci-gcc"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "dev",
+      "configurePreset": "dev",
+      "output": {
+        "outputOnFailure": true
+      },
+      "execution": {
+        "noTestsAction": "error"
+      }
+    },
+    {
+      "name": "ci-clang",
+      "configurePreset": "ci-clang",
+      "output": {
+        "outputOnFailure": true
+      },
+      "execution": {
+        "noTestsAction": "error"
+      }
+    },
+    {
+      "name": "ci-gcc",
+      "configurePreset": "ci-gcc",
+      "output": {
+        "outputOnFailure": true
+      },
+      "execution": {
+        "noTestsAction": "error"
+      }
+    }
+  ]
+}

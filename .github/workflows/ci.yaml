@@ -1,0 +1,66 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: ${{ matrix.name }}
+    runs-on: ubuntu-24.04
+    container: archlinux:base
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Clang / Debug / lint
+            preset: ci-clang
+            lint: true
+          - name: GCC / Release
+            preset: ci-gcc
+            lint: false
+    env:
+      PRESET: ${{ matrix.preset }}
+    steps:
+      - name: Install build tools and Qt
+        run: pacman -Syu --noconfirm --needed git gcc clang cmake make python qt6-declarative qt6-wayland
+
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Print tool versions
+        run: |
+          cmake --version
+          clang++ --version
+          g++ --version
+          clang-format --version
+          /usr/lib/qt6/bin/qmlformat --version
+          pacman -Q qt6-base qt6-declarative qt6-wayland
+
+      - name: Check formatting
+        if: matrix.lint
+        run: python3 scripts/format.py
+
+      - name: Configure
+        run: cmake --preset "$PRESET"
+
+      - name: Build
+        run: cmake --build --preset "$PRESET" --parallel 2
+
+      - name: Run tests
+        run: ctest --preset "$PRESET"
+
+      - name: Static analysis
+        if: matrix.lint
+        run: python3 scripts/lint.py
