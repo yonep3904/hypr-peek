@@ -1,0 +1,36 @@
+BasedOnStyle: LLVM
+Standard: c++20
+
+# Indentation
+IndentWidth: 4
+ContinuationIndentWidth: 4
+TabWidth: 4
+UseTab: Never
+NamespaceIndentation: All
+IndentCaseLabels: true
+
+# Line length
+ColumnLimit: 100
+
+# Braces and short statements
+BreakBeforeBraces: Attach
+InsertBraces: true
+AllowShortFunctionsOnASingleLine: Empty
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+AllowShortBlocksOnASingleLine: Never
+
+# Pointers and references
+PointerAlignment: Left
+DerivePointerAlignment: false
+
+# Includes
+SortIncludes: CaseSensitive
+IncludeBlocks: Regroup
+
+# Templates
+AlwaysBreakTemplateDeclarations: Yes
+
+# Comments
+ReflowComments: false
+FixNamespaceComments: false
